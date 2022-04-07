@@ -19,7 +19,7 @@ class FirebaseCoreDesktopPlugin : public flutter::Plugin {
   static void RegisterWithRegistrar(flutter::PluginRegistrar *registrar) {
     auto channel =
         std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-            registrar->messenger(), "firebase_core_desktop",
+            registrar->messenger(), "plugins.flutter.io/firebase_core",
             &flutter::StandardMethodCodec::GetInstance());
 
     auto plugin = std::make_unique<FirebaseCoreDesktopPlugin>();
@@ -42,19 +42,21 @@ class FirebaseCoreDesktopPlugin : public flutter::Plugin {
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
     const auto &method_name = method_call.method_name();
 
-    // Replace "getPlatformVersion" check with your plugin's method.
-    if (method_name == "getPlatformVersion") {
-      char *value = nullptr;
-      int ret = system_info_get_platform_string(
-          "http://tizen.org/feature/platform.version", &value);
-      if (ret == SYSTEM_INFO_ERROR_NONE) {
-        result->Success(flutter::EncodableValue(std::string(value)));
-      } else {
-        result->Error(std::to_string(ret), "Failed to get platform version.");
-      }
-      if (value) {
-        free(value);
-      }
+    if (method_name == "Firebase#initializeCore") {
+      // called by: https://github.com/firebase/flutterfire/blob/1da9dc1/packages/firebase_core/firebase_core_platform_interface/lib/src/method_channel/method_channel_firebase.dart#L32
+      // accorting to comment there, platform can potentially provide some apps data to initialize
+      result->Success(flutter::EncodableValue(flutter::EncodableList()));
+    } else if (method_name == "Firebase#initializeApp") {
+      // called by: https://github.com/firebase/flutterfire/blob/1da9dc1/packages/firebase_core/firebase_core_platform_interface/lib/src/method_channel/method_channel_firebase.dart#L86
+      auto app = std::get<flutter::EncodableMap>(*method_call.arguments());
+      auto response = flutter::EncodableMap();
+      auto name = app[flutter::EncodableValue("appName")];
+      LOG_INFO("Firebase core initializing app `%s`", std::get<std::string>(name).c_str());
+
+      response[flutter::EncodableValue("name")] = name;
+      const auto options = flutter::EncodableValue("options");
+      response[options] = app[options];
+      result->Success(flutter::EncodableValue(response));
     } else {
       result->NotImplemented();
     }
