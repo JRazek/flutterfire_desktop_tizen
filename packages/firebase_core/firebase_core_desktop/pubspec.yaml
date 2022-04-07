@@ -36,6 +36,9 @@ flutter:
       windows:
         dartPluginClass: FirebaseCore
         pluginClass: none
+      tizen:
+        pluginClass: FirebaseCoreDesktopPlugin
+        fileName: firebase_core_desktop_plugin.h
 
 false_secrets:
   - /example/lib/main.dart
