@@ -33,6 +33,9 @@ dependencies:
   google_sign_in: ^5.0.0-nullsafety
   google_sign_in_dartio: ^0.2.0
   yaru: ^0.2.0
+  shared_preferences_tizen:
+  url_launcher_tizen:
+
 
 dependency_overrides:
   firebase_auth_desktop:

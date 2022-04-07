@@ -47,6 +47,7 @@ class StorageBox<T extends Object> {
       _home = _env['APPDATA'] as String;
     }
 
+    // FIXME: does not work on Tizen
     final _path = '$_home$_sep.firebase-auth$_sep$_name.json';
 
     return File(_path);

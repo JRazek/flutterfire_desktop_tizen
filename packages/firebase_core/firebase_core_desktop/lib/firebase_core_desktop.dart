@@ -18,6 +18,9 @@ class FirebaseCore extends FirebasePlatform {
     FirebasePlatform.instance = FirebaseCore();
   }
 
+  static void register() =>
+      registerWith(); // FIXME: why tizen/flutter/generated_main.dart calls this?
+
   FirebaseApp _mapDartToPlatfromApp(core_dart.FirebaseApp app) {
     return FirebaseApp._(
       app.name,
