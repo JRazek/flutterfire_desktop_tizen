@@ -14,6 +14,7 @@ part 'firebase_app_desktop.dart';
 class FirebaseCore extends FirebasePlatform {
   /// Called by PluginRegistry to register this plugin as the implementation for Desktop
   static void registerWith() {
+    print("FirebaseCore.registerWith()");
     FirebasePlatform.instance = FirebaseCore();
   }
 
