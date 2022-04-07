@@ -41,6 +41,9 @@ flutter:
       windows:
         dartPluginClass: FirebaseAuthDesktop
         pluginClass: none
+      tizen:
+        pluginClass: FirebaseAuthDesktopPlugin
+        fileName: firebase_auth_desktop_plugin.h
 
 false_secrets:
   - /example/**
