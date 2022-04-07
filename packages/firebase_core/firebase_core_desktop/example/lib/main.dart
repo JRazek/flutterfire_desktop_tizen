@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   Future<void> initializeDefault() async {
     final app = await Firebase.initializeApp(options: firebaseOptions);
     log('Initialized default app $app');
+    print('Initialized default app $app');
   }
 
   Future<void> initializeSecondary() async {
@@ -31,23 +32,26 @@ class MyApp extends StatelessWidget {
     );
 
     log('Initialized $app');
+    print('Initialized $app');
   }
 
   void apps() {
-    final apps = Firebase.apps;
-    log('Currently initialized apps: $apps');
+    log('Currently initialized apps: ${Firebase.apps}');
+    print('Currently initialized apps: ${Firebase.apps}');
   }
 
   void options() {
     final app = Firebase.app(name);
     final options = app.options;
     log('Current options for app $name: $options');
+    print('Current options for app $name: $options');
   }
 
   Future<void> delete() async {
     final app = Firebase.app(name);
     await app.delete();
     log('App $name deleted');
+    print('App $name deleted');
   }
 
   @override
