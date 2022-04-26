@@ -30,6 +30,17 @@ class StorageBox<T extends Object> {
   /// The name of the box which you want to create or get.
   final String _name;
 
+  bool _isTizen() {
+    File file = File('/etc/tizen-release');
+    return file.existsSync();
+  }
+
+  // unused for now
+  Future<String> _getTizenDataPath() async {
+    Directory dataDir = await path_provider.getApplicationDocumentsDirectory();
+    return dataDir.path;
+  }
+
   File get _file {
     /// `APPDATA` for windows, `HOME` for linux and mac
     final _env = Platform.environment;
@@ -47,7 +58,13 @@ class StorageBox<T extends Object> {
       _home = _env['APPDATA'] as String;
     }
 
-    // FIXME: does not work on Tizen
+    if (_isTizen()) {
+      // temporary solution, eventually we should use
+      // path_provider.getApplicationDocumentsDirectory(),
+      // like in _getTizenDataPath()
+      _home = '/opt/usr/home/owner/apps_rw/com.example.example/data/';
+    }
+
     final _path = '$_home$_sep.firebase-auth$_sep$_name.json';
 
     return File(_path);

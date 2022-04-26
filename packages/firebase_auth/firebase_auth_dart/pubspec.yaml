@@ -13,6 +13,9 @@ dependencies:
   googleapis_auth: ^1.1.0
   http: ^0.13.4
   meta: ^1.3.0
+  path_provider: ^2.0.7
+  path_provider_tizen: ^2.0.2
+
 
 dev_dependencies:
   async: ^2.8.1

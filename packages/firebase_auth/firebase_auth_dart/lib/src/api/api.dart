@@ -18,6 +18,9 @@ import 'package:meta/meta.dart';
 import '../../src/providers/email_auth.dart';
 import 'authentication/phone.dart';
 
+import 'package:path_provider/path_provider.dart';
+
+
 /// A return type from Idp authentication requests, must be extended by any other response
 /// type for any operation that requires idToken.
 @protected
