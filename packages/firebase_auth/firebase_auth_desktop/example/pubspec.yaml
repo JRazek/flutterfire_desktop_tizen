@@ -34,7 +34,10 @@ dependencies:
   google_sign_in_dartio: ^0.2.0
   yaru: ^0.2.0
   shared_preferences_tizen:
-  url_launcher_tizen:
+  url_launcher: ^6.1.0
+  url_launcher_tizen: ^2.1.1
+  webview_flutter: ^3.0.1
+  webview_flutter_tizen: ^0.4.2
 
 
 dependency_overrides:
