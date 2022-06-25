@@ -23,14 +23,35 @@ FirebaseOptions get firebaseOptions => const FirebaseOptions(
 
 // Requires that the Firebase Auth emulator is running locally
 // e.g via `melos run firebase:emulator`.
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Welcome to Flutter',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Welcome to Flutter'),
+        ),
+        body: const Center(
+          child: Text('Hello World'),
+        ),
+      ),
+    );
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  print("initialized!!");
   FirebaseAuthDesktop
       .registerWith(); // FIXME: this plugin registration should be done automatically
 
   await Firebase.initializeApp(options: firebaseOptions);
-  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   await GoogleSignInDart.register(
     clientId:

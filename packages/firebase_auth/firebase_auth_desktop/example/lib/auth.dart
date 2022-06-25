@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'animated_error.dart';
 import 'sms_dialog.dart';
@@ -42,6 +43,22 @@ class ScaffoldSnackbar {
           behavior: SnackBarBehavior.floating,
         ),
       );
+  }
+}
+
+class GoogleLoginPage extends StatelessWidget {
+  const GoogleLoginPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const WebView(
+      initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+      initialUrl:
+          'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=635016790171-056umgnbc1gcb0urnrfo4deiis3siaiu.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&hl=en',
+      javascriptMode: JavascriptMode.unrestricted,
+      userAgent:
+          'Chrome/81.0.0.0 Mobile',
+    );
   }
 }
 
@@ -213,32 +230,12 @@ class _AuthGateState extends State<AuthGate> {
 
   Future _onGoogleSignIn() async {
     resetError();
-
-    try {
-      final result = await DesktopWebviewAuth.signIn(
-        GoogleSignInArgs(
-          clientId:
-              '448618578101-sg12d2qin42cpr00f8b0gehs5s7inm0v.apps.googleusercontent.com',
-          redirectUri: redirectUri,
-          scope: 'https://www.googleapis.com/auth/userinfo.email',
-        ),
-      );
-
-      if (result != null) {
-        // Create a new credential
-        final credential = GoogleAuthProvider.credential(
-          idToken: result.idToken,
-          accessToken: result.accessToken,
-        );
-
-        // Once signed in, return the UserCredential
-        await _auth.signInWithCredential(credential);
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        error = '${e.message}';
-      });
-    }
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return GoogleLoginPage();
+      },
+    );
   }
 
   Future _onTwitterSignIn() async {
