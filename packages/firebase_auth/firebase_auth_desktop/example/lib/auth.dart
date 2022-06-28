@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, public_member_api_docs
 
+import 'dart:collection';
+import 'dart:io';
+
 import 'package:desktop_webview_auth/desktop_webview_auth.dart';
 import 'package:desktop_webview_auth/facebook.dart';
-import 'package:desktop_webview_auth/google.dart';
+
 import 'package:desktop_webview_auth/twitter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -46,18 +49,49 @@ class ScaffoldSnackbar {
   }
 }
 
+/// Parses url query params into a map
+/// @param url: The url to parse.
+Map<String, String> _getQueryParams(String url) {
+  final urlParams = url.split(RegExp('[?&# ]'));
+  final Map<String, String> queryParams = HashMap();
+  List<String> parts;
+
+  for (final param in urlParams) {
+    if (param.contains('=')) {
+      parts = param.split('=');
+      queryParams[parts[0]] = Uri.decodeFull(parts[1]);
+    }
+  }
+
+  return queryParams;
+}
+
 class GoogleLoginPage extends StatelessWidget {
   const GoogleLoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const WebView(
+    return WebView(
+      onWebViewCreated: (controller) async {
+        final cookieManager = CookieManager();
+        await cookieManager.clearCookies();
+      },
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       initialUrl:
-          'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=635016790171-056umgnbc1gcb0urnrfo4deiis3siaiu.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&hl=en',
+          'https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=635016790171-4fmtpo2buod84r6v0rgfhaefq8dpr0c2.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&redirect_uri=http%3A%2F%2F127.0.0.1%3A33467',
       javascriptMode: JavascriptMode.unrestricted,
-      userAgent:
-          'Chrome/81.0.0.0 Mobile',
+      userAgent: 'Chrome/81.0.0.0 Mobile',
+      navigationDelegate: (NavigationRequest request) {
+        if (request.url.startsWith('http://127.0.0.1')) {
+          print('detected redirect to $request}');
+          final params = _getQueryParams(request.url);
+          final token = params['access_token'];
+
+          return NavigationDecision.navigate;
+        }
+        print('allowing navigation to $request');
+        return NavigationDecision.navigate;
+      },
     );
   }
 }
@@ -233,7 +267,7 @@ class _AuthGateState extends State<AuthGate> {
     await showDialog(
       context: context,
       builder: (context) {
-        return GoogleLoginPage();
+        return const GoogleLoginPage();
       },
     );
   }
