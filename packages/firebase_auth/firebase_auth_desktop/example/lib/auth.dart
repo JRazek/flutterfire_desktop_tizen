@@ -11,7 +11,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:firebase_auth_desktop/oauth/oauth2.dart';
 
 import 'animated_error.dart';
 import 'sms_dialog.dart';
@@ -49,48 +52,21 @@ class ScaffoldSnackbar {
   }
 }
 
-/// Parses url query params into a map
-/// @param url: The url to parse.
-Map<String, String> _getQueryParams(String url) {
-  final urlParams = url.split(RegExp('[?&# ]'));
-  final Map<String, String> queryParams = HashMap();
-  List<String> parts;
-
-  for (final param in urlParams) {
-    if (param.contains('=')) {
-      parts = param.split('=');
-      queryParams[parts[0]] = Uri.decodeFull(parts[1]);
-    }
-  }
-
-  return queryParams;
-}
-
 class GoogleLoginPage extends StatelessWidget {
   const GoogleLoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return WebView(
-      onWebViewCreated: (controller) async {
-        final cookieManager = CookieManager();
-        await cookieManager.clearCookies();
-      },
-      initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-      initialUrl:
-          'https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=635016790171-4fmtpo2buod84r6v0rgfhaefq8dpr0c2.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&redirect_uri=http%3A%2F%2F127.0.0.1%3A33467',
-      javascriptMode: JavascriptMode.unrestricted,
-      userAgent: 'Chrome/81.0.0.0 Mobile',
-      navigationDelegate: (NavigationRequest request) {
-        if (request.url.startsWith('http://127.0.0.1')) {
-          print('detected redirect to $request}');
-          final params = _getQueryParams(request.url);
-          final token = params['access_token'];
-
-          return NavigationDecision.navigate;
-        }
-        print('allowing navigation to $request');
-        return NavigationDecision.navigate;
+    return OAuth(
+      baseUrl: 'https://accounts.google.com/o/oauth2/auth',
+      clientID:
+          '635016790171-4fmtpo2buod84r6v0rgfhaefq8dpr0c2.apps.googleusercontent.com',
+      redirectUri: redirectUri,
+      state: 'profile',
+      scope: 'https://www.googleapis.com/auth/userinfo.email',
+    ).authenticate(
+      onDone: (data) {
+        print(data);
       },
     );
   }

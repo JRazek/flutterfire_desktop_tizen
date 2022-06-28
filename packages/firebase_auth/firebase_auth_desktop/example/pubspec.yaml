@@ -4,7 +4,7 @@ publish_to: none
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=2.12.0"
 
 dependencies:
   ewk_webview_flutter_tizen:
@@ -13,7 +13,6 @@ dependencies:
     sdk: flutter
   path_provider: ^2.0.7
   path_provider_tizen: ^2.0.2
-  webview_flutter: ^3.0.4
   desktop_webview_auth: ^0.0.6
   firebase_auth: ^3.3.7
   firebase_auth_desktop: ^0.1.1

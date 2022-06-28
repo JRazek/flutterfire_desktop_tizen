@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, public_member_api_docs
 
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_desktop/firebase_auth_desktop.dart';
 import 'package:firebase_core/firebase_core.dart';
