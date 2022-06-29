@@ -11,6 +11,7 @@ class AuthData {
   const AuthData({
     required this.clientID,
     this.accessToken,
+    this.idToken,
     this.firstName,
     this.lastName,
     this.userID,
@@ -23,6 +24,7 @@ class AuthData {
   final String? userID; // User's profile id
   final String? clientID; // OAuth client id
   final String? accessToken; // OAuth access token
+  final String? idToken; // OpenID id token
   final String? firstName; // User's first name
   final String? lastName; // User's last name
   final String? email; // User's email
@@ -61,6 +63,7 @@ class AuthData {
 
     return 'AuthData {\n\n'
         '\t\ttoken: $accessToken\n\n'
+        '\t\tid_token: $idToken\n\n'
         '\t\tuser id: $userID\n\n'
         '\t\tfirst name: $firstName\n\n'
         '\t\tlast name: $lastName\n\n'

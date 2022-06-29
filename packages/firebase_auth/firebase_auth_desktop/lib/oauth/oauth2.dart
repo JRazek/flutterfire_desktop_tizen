@@ -15,7 +15,7 @@ class OAuth {
     required this.baseUrl,
     required this.clientID,
     required this.redirectUri,
-    required this.state,
+    this.state,
     required this.scope,
     this.responseType,
     this.otherQueryParams = const {},
@@ -25,10 +25,11 @@ class OAuth {
   final String clientID; // OAuth clientID
   final String? responseType; // OAuth clientSecret
   final String redirectUri; // OAuth redirectUri
-  final String state; // OAuth state
+  final String? state; // OAuth state
   final String scope; // OAuth scope
   final Map<String, String> otherQueryParams;
   static const String TOKEN_KEY = 'access_token'; // OAuth token key
+  static const String ID_TOKEN = 'id_token'; // OpenID id token
   static const String CODE_KEY = 'code'; // OAuth code key
   static const String STATE_KEY = 'state'; // OAuth state key
   static const String SCOPE_KEY = 'scope'; // OAuth scope key
@@ -44,27 +45,24 @@ class OAuth {
     required Function(AuthData) onDone,
     bool clearCache = false,
   }) {
-    final responseTypeQuery = '&response_type=${responseType ?? 'token'}';
+    final responseTypeQuery = '&response_type=${responseType ?? 'id_token'}';
     final otherParams = StringBuffer();
 
     for (final key in otherQueryParams.keys) {
       otherParams.write('&$key=${otherQueryParams[key]}');
     }
 
-    var authUrl = '$baseUrl'
+    final authUrl = '$baseUrl'
         '?client_id=${Uri.encodeComponent(clientID)}'
         '&redirect_uri=${Uri.encodeComponent(redirectUri)}'
         '&scope=${Uri.encodeComponent(scope)}'
         '$responseTypeQuery'
         '$otherParams';
 
-    print(authUrl);
-
     return WebView(
       onWebViewCreated: (controller) async {
         if (clearCache) {
           final cookieManager = CookieManager();
-
           await cookieManager.clearCookies();
           await controller.clearCache();
         }
@@ -86,17 +84,16 @@ class OAuth {
       (request) {
         final url = request.url;
         if (url.startsWith(redirectUri)) {
-          print('redirected to: $url');
-
           final returnedData = _getQueryParams(url);
           returnedData[CLIENT_ID_KEY] = clientID;
           returnedData[TOKEN_KEY] = clientID;
           returnedData[REDIRECT_URI_KEY] = redirectUri;
-          returnedData[STATE_KEY] = state;
+          returnedData[STATE_KEY] = state!;
 
           final authData = AuthData(
             clientID: clientID,
             accessToken: returnedData[TOKEN_KEY],
+            idToken: returnedData[ID_TOKEN],
             response: returnedData,
           );
 
