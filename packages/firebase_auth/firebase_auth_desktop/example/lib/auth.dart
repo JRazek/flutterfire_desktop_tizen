@@ -63,9 +63,14 @@ class GoogleLoginPage extends StatelessWidget {
           '635016790171-4fmtpo2buod84r6v0rgfhaefq8dpr0c2.apps.googleusercontent.com',
       redirectUri: redirectUri,
       state: 'profile',
-      scope: 'https://www.googleapis.com/auth/userinfo.email',
+      scope: 'https://www.googleapis.com/auth/plus.login',
+      responseType: 'token id_token',
     ).authenticate(
       onDone: (data) {
+        print('logged in successfuly!!');
+        final credential =
+            GoogleAuthProvider.credential(accessToken: data.accessToken);
+        _auth.signInWithCredential(credential);
         print(data);
       },
     );

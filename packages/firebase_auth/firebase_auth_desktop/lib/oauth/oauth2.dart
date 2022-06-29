@@ -58,6 +58,8 @@ class OAuth {
         '$responseTypeQuery'
         '$otherParams';
 
+    print(authUrl);
+
     return WebView(
       onWebViewCreated: (controller) async {
         if (clearCache) {
