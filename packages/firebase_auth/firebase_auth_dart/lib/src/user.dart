@@ -187,7 +187,7 @@ class User {
   Future<void> _refreshIdToken(bool forceRefresh) async {
     if (forceRefresh || !_decodedIdToken.isValidTimestamp) {
       _setIdToken(await _auth._api.refreshIdToken(refreshToken));
-      _auth._updateCurrentUserAndEvents(this);
+      await _auth._updateCurrentUserAndEvents(this);
     }
   }
 
@@ -366,7 +366,7 @@ class User {
     }
 
     _user.addAll(user);
-    _auth._updateCurrentUserAndEvents(this);
+    await _auth._updateCurrentUserAndEvents(this);
   }
 
   /// Updates the user's email address.

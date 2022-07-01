@@ -38,7 +38,7 @@ class ConfirmationResult {
       // Map the json response to an actual user.
       final user = User(userData.toJson()..addAll(response.toJson()), _auth);
 
-      _auth._updateCurrentUserAndEvents(user, true);
+      await _auth._updateCurrentUserAndEvents(user, true);
 
       final credential = PhoneAuthProvider.credential(
         verificationId: verificationId,

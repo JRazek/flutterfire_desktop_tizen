@@ -36,13 +36,14 @@ class StorageBox<T extends Object> {
   }
 
   // unused for now
-  String _getTizenDataPath() {
-    const test =
-        '/opt/usr/home/owner/apps_rw/org.tizen.firebase_desktop_example/data/';
-    return test;
+  Future<String> _getTizenDataPath() async {
+    final packageName = (await PackageInfo.fromPlatform()).packageName;
+    final path = '/opt/usr/home/owner/apps_rw/$packageName/data/';
+
+    return path;
   }
 
-  File get _file {
+  Future<File> get _file async {
     /// `APPDATA` for windows, `HOME` for linux and mac
     final _env = Platform.environment;
     final _sep = Platform.pathSeparator;
@@ -63,7 +64,7 @@ class StorageBox<T extends Object> {
       // temporary solution, eventually we should use
       // path_provider.getApplicationDocumentsDirectory(),
       // like in _getTizenDataPath()
-      _home = _getTizenDataPath();
+      _home = await _getTizenDataPath();
     }
 
     final _path = '$_home$_sep.firebase-auth$_sep$_name.json';
@@ -73,11 +74,12 @@ class StorageBox<T extends Object> {
 
   /// Store the key-value pair in the box with [_name], if key already
   /// exists the value will be overwritten.
-  void putValue(String key, T? value) {
-    if (!_file.existsSync()) {
-      _file.createSync(recursive: true);
+  Future putValue(String key, T? value) async {
+    final file = await _file;
+    if (!file.existsSync()) {
+      file.createSync(recursive: true);
     }
-    final contentMap = _readFile();
+    final contentMap = await _readFile();
 
     if (value != null) {
       contentMap[key] = value;
@@ -86,17 +88,18 @@ class StorageBox<T extends Object> {
     }
 
     if (contentMap.isEmpty) {
-      _file.deleteSync(recursive: true);
+      file.deleteSync(recursive: true);
     } else {
-      _file.writeAsStringSync(jsonEncode(contentMap));
+      file.writeAsStringSync(jsonEncode(contentMap));
     }
   }
 
   /// Get the value for a specific key, if no such key exists, or no such box with [_name]
   /// [StorageBoxException] will be thrown.
-  T getValue(String key) {
+  Future<T> getValue(String key) async {
     try {
-      final contentText = _file.readAsStringSync();
+      final file = await _file;
+      final contentText = file.readAsStringSync();
       final Map<String, dynamic> content = jsonDecode(contentText);
 
       if (!content.containsKey(key)) {
@@ -110,8 +113,9 @@ class StorageBox<T extends Object> {
     }
   }
 
-  Map<String, dynamic> _readFile() {
-    final contentText = _file.readAsStringSync();
+  Future<Map<String, dynamic>> _readFile() async {
+    final file = await _file;
+    final contentText = file.readAsStringSync();
 
     if (contentText.isEmpty) {
       return {};

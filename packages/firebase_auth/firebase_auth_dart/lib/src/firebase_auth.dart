@@ -101,9 +101,9 @@ class FirebaseAuth {
 
   /// Helper method to update currentUser and events.
   @protected
-  void _updateCurrentUserAndEvents(User? user,
-      [bool authStateChanged = false]) {
-    _userStorage.putValue(
+  Future _updateCurrentUserAndEvents(User? user,
+      [bool authStateChanged = false]) async {
+    await _userStorage.putValue(
       '${app.options.apiKey}:${app.name}',
       {'currentUser': user?.toMap()},
     );
@@ -156,7 +156,7 @@ class FirebaseAuth {
       // Map the json response to an actual user.
       final user = User(userData.toJson()..addAll(response.toJson()), this);
 
-      _updateCurrentUserAndEvents(user, true);
+      await _updateCurrentUserAndEvents(user, true);
 
       // Make a credential object based on the current sign-in method.
       return UserCredential._(
@@ -200,7 +200,7 @@ class FirebaseAuth {
       // Map the json response to an actual user.
       final user = User(userData.toJson()..addAll(response.toJson()), this);
 
-      _updateCurrentUserAndEvents(user, true);
+      await _updateCurrentUserAndEvents(user, true);
 
       return UserCredential._(
         auth: this,
@@ -360,7 +360,7 @@ class FirebaseAuth {
       // Map the json response to an actual user.
       final user = User(userData..addAll(response.toJson()), this);
 
-      _updateCurrentUserAndEvents(user, true);
+      await _updateCurrentUserAndEvents(user, true);
 
       return UserCredential._(
           auth: this,
@@ -484,7 +484,7 @@ class FirebaseAuth {
       // Map the json response to an actual user.
       final user = User(userData.toJson()..addAll(response), this);
 
-      _updateCurrentUserAndEvents(user, true);
+      await _updateCurrentUserAndEvents(user, true);
 
       return UserCredential._(
         auth: this,
@@ -530,7 +530,7 @@ class FirebaseAuth {
     // Map the json response to an actual user.
     final user = User(userData.toJson()..addAll(response.toJson()), this);
 
-    _updateCurrentUserAndEvents(user, true);
+    await _updateCurrentUserAndEvents(user, true);
 
     return UserCredential._(
       auth: this,
@@ -606,7 +606,7 @@ class FirebaseAuth {
   /// any [authStateChanges], or [idTokenChanges] stream listeners.
   Future<void> signOut() async {
     try {
-      _updateCurrentUserAndEvents(null, true);
+      await _updateCurrentUserAndEvents(null, true);
     } catch (exception) {
       log('$exception', name: 'FirebaseAuth/signOut');
 
