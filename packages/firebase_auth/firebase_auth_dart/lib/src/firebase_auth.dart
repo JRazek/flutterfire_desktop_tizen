@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file.
 
-// ignore_for_file: require_trailing_commas
+// ignore_for_file: require_trailing_commas, avoid_dynamic_calls
 
 part of firebase_auth_dart;
 

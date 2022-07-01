@@ -22,7 +22,7 @@ dependencies:
     sdk: flutter
   meta: ^1.3.0
   ewk_webview_flutter_tizen:
-    path: /home/j.razek/Tizen/projects/ewk_version/packages/ewk_webview_flutter
+    path: /home/user/Tizen/projects/ewk_version/packages/ewk_webview_flutter
 
 dev_dependencies:
   async: ^2.8.1

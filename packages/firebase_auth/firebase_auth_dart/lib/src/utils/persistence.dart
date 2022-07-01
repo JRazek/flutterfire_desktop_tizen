@@ -31,14 +31,15 @@ class StorageBox<T extends Object> {
   final String _name;
 
   bool _isTizen() {
-    File file = File('/etc/tizen-release');
+    final file = File('/etc/tizen-release');
     return file.existsSync();
   }
 
   // unused for now
-  Future<String> _getTizenDataPath() async {
-    Directory dataDir = await path_provider.getApplicationDocumentsDirectory();
-    return dataDir.path;
+  String _getTizenDataPath() {
+    const test =
+        '/opt/usr/home/owner/apps_rw/org.tizen.firebase_desktop_example/data/';
+    return test;
   }
 
   File get _file {
@@ -62,7 +63,7 @@ class StorageBox<T extends Object> {
       // temporary solution, eventually we should use
       // path_provider.getApplicationDocumentsDirectory(),
       // like in _getTizenDataPath()
-      _home = '/opt/usr/home/owner/apps_rw/com.example.example/data/';
+      _home = _getTizenDataPath();
     }
 
     final _path = '$_home$_sep.firebase-auth$_sep$_name.json';

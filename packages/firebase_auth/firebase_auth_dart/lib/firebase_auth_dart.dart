@@ -15,7 +15,6 @@ import 'package:firebase_core_dart/firebase_core_dart.dart';
 import 'package:firebaseapis/identitytoolkit/v3.dart' as idp;
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'src/api/api.dart' show API, APIConfig;
 import 'src/api/authentication/recaptcha/recaptcha_verifier.dart' as verifier;
