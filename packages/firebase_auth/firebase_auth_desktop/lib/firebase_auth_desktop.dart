@@ -62,6 +62,7 @@ class FirebaseAuthDesktop extends FirebaseAuthPlatform {
     FirebaseAuthPlatform.instance = FirebaseAuthDesktop.instance;
     RecaptchaVerifierFactoryPlatform.instance =
         RecaptchaVerifierFactoryDesktop.instance;
+    print("FirebaseAuthDesktop.registerWith()");
   }
 
   /// Stub initializer to allow creating an instance without

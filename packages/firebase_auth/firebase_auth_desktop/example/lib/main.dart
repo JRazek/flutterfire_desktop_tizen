@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, public_member_api_docs
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_desktop/firebase_auth_desktop.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,9 @@ FirebaseOptions get firebaseOptionsDefault {
 // e.g via `melos run firebase:emulator`.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  FirebaseAuthDesktop
+      .registerWith(); // FIXME: this plugin registration should be done automatically
 
   await Firebase.initializeApp(options: firebaseOptionsDefault);
 

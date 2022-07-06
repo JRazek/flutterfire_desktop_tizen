@@ -37,6 +37,7 @@ flutter:
         dartPluginClass: FirebaseCore
         pluginClass: none
       tizen:
+        dartPluginClass: FirebaseCore
         pluginClass: FirebaseCoreDesktopPlugin
         fileName: firebase_core_desktop_plugin.h
 

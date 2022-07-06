@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "inBh1KVWS9wF1/EXXXLaIIWQKGZJvCjtFPdUaUpvVvsRv1vtAe0QMFekDaUB+tNkIpa2SOblW87+OY9teWbTRQ==",
+  "success": true,
+  "projectFilePath": "/home/user/Tizen/projects/flutterfire_desktop_tizen/packages/firebase_auth/firebase_auth_desktop/example/tizen/Runner.csproj",
+  "expectedPackageFiles": [
+    "/home/user/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "/home/user/.nuget/packages/tizen.net/9.0.0.16760/tizen.net.9.0.0.16760.nupkg.sha512",
+    "/home/user/.nuget/packages/tizen.net.api4/4.0.1.14164/tizen.net.api4.4.0.1.14164.nupkg.sha512"
+  ],
+  "logs": []
+}

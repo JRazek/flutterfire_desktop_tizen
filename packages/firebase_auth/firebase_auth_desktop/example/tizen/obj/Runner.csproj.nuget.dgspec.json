@@ -1,0 +1,117 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/user/Tizen/projects/flutterfire_desktop_tizen/packages/firebase_auth/firebase_auth_desktop/example/tizen/Runner.csproj": {}
+  },
+  "projects": {
+    "/home/user/Tizen/projects/flutterfire_desktop_tizen/packages/firebase_auth/firebase_auth_desktop/example/tizen/Runner.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/user/Tizen/projects/flutterfire_desktop_tizen/packages/firebase_auth/firebase_auth_desktop/example/tizen/Runner.csproj",
+        "projectName": "Runner",
+        "projectPath": "/home/user/Tizen/projects/flutterfire_desktop_tizen/packages/firebase_auth/firebase_auth_desktop/example/tizen/Runner.csproj",
+        "packagesPath": "/home/user/.nuget/packages/",
+        "outputPath": "/home/user/Tizen/projects/flutterfire_desktop_tizen/packages/firebase_auth/firebase_auth_desktop/example/tizen/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/user/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "tizen40"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "tizen40": {
+            "targetAlias": "tizen40",
+            "projectReferences": {
+              "/home/user/sources/flutter-tizen/embedding/csharp/Tizen.Flutter.Embedding/Tizen.Flutter.Embedding.csproj": {
+                "projectPath": "/home/user/sources/flutter-tizen/embedding/csharp/Tizen.Flutter.Embedding/Tizen.Flutter.Embedding.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "tizen40": {
+          "targetAlias": "tizen40",
+          "dependencies": {
+            "Tizen.NET": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.0.16760, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/user/sources/flutter-tizen/embedding/csharp/Tizen.Flutter.Embedding/Tizen.Flutter.Embedding.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/user/sources/flutter-tizen/embedding/csharp/Tizen.Flutter.Embedding/Tizen.Flutter.Embedding.csproj",
+        "projectName": "Tizen.Flutter.Embedding",
+        "projectPath": "/home/user/sources/flutter-tizen/embedding/csharp/Tizen.Flutter.Embedding/Tizen.Flutter.Embedding.csproj",
+        "packagesPath": "/home/user/.nuget/packages/",
+        "outputPath": "/home/user/sources/flutter-tizen/embedding/csharp/Tizen.Flutter.Embedding/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/user/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Tizen.NET": {
+              "target": "Package",
+              "version": "[4.0.1.14164, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

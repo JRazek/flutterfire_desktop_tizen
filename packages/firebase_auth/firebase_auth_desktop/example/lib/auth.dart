@@ -358,11 +358,10 @@ class _AuthGateState extends State<AuthGate> {
                         ),
                         const SizedBox(height: 20),
                         ...SocialOAuthProvider.values
-                            .skipWhile(
-                          (provider) => defaultTargetPlatform ==
-                                  TargetPlatform.macOS
-                              ? provider == SocialOAuthProvider.apple
-                              : defaultTargetPlatform != TargetPlatform.macOS,
+                            .where(
+                          (provider) =>
+                              defaultTargetPlatform == TargetPlatform.macOS ||
+                              provider != SocialOAuthProvider.apple,
                         )
                             .map((provider) {
                           return Padding(

@@ -1,11 +1,10 @@
 #include "firebase_auth_desktop_plugin.h"
 
 // For getPlatformVersion; remove unless needed for your plugin implementation.
-#include <system_info.h>
-
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar.h>
 #include <flutter/standard_method_codec.h>
+#include <system_info.h>
 
 #include <memory>
 #include <string>
