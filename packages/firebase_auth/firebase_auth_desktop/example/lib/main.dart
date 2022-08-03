@@ -5,7 +5,6 @@ import 'package:firebase_auth_desktop/firebase_auth_desktop.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in_dartio/google_sign_in_dartio.dart';
 import 'package:yaru/yaru.dart';
 
 import 'auth.dart';
@@ -46,11 +45,6 @@ Future<void> main() async {
   await Firebase.initializeApp(options: firebaseOptionsDefault);
 
   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-
-  await GoogleSignInDart.register(
-    clientId:
-        '448618578101-sg12d2qin42cpr00f8b0gehs5s7inm0v.apps.googleusercontent.com',
-  );
 
   runApp(const AuthExampleApp());
 }

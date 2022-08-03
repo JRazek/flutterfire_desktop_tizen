@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, public_member_api_docs
+import 'package:desktop_webview_auth_tizen/desktop_webview_auth_tizen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -85,6 +86,10 @@ class _AuthGateState extends State<AuthGate> {
   String error = '';
 
   AuthMode mode = AuthMode.login;
+
+  OAuthProviderPage? loginPage;
+
+  final _auth = FirebaseAuth.instance;
 
   bool isLoading = false;
 
@@ -213,7 +218,28 @@ class _AuthGateState extends State<AuthGate> {
 
     try {
       setIsLoading();
-      await authService.googleSignIn();
+
+	  setState((){
+		  loginPage = GoogleLoginPage(
+			clientID:
+				'448618578101-sg12d2qin42cpr00f8b0gehs5s7inm0v.apps.googleusercontent.com',
+			state: 'profile',
+			scope: 'https://www.googleapis.com/auth/userinfo.email',
+			redirectUri: 'https://react-native-firebase-testing.firebaseapp.com/__/auth/handler',
+		  );
+	  });
+
+	final result = await loginPage!.getAuthData();
+	
+	debugPrint(result.toString());
+
+	final credential = GoogleAuthProvider.credential(
+	  idToken: result.idToken,
+	  accessToken: result.accessToken,
+	);
+
+	await _auth.signInWithCredential(credential);
+
     } on FirebaseAuthException catch (e) {
       setState(() {
         error = '${e.message}';
@@ -284,206 +310,209 @@ class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Center(
-                child: SizedBox(
-                  width: 400,
-                  child: Form(
-                    key: formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedError(text: error, show: error.isNotEmpty),
-                        const SizedBox(height: 20),
-                        if (mode != AuthMode.phone)
-                          Column(
-                            children: [
+      body: loginPage ??
+          Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: SizedBox(
+                      width: 400,
+                      child: Form(
+                        key: formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AnimatedError(text: error, show: error.isNotEmpty),
+                            const SizedBox(height: 20),
+                            if (mode != AuthMode.phone)
+                              Column(
+                                children: [
+                                  TextFormField(
+                                    controller: emailController,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Email'),
+                                    validator: (value) =>
+                                        value != null && value.isNotEmpty
+                                            ? null
+                                            : 'Required',
+                                  ),
+                                  const SizedBox(height: 20),
+                                  TextFormField(
+                                    controller: passwordController,
+                                    obscureText: true,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Password'),
+                                    validator: (value) =>
+                                        value != null && value.isNotEmpty
+                                            ? null
+                                            : 'Required',
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(height: 10),
+                            if (mode != AuthMode.phone)
+                              TextButton(
+                                onPressed: _resetPassword,
+                                child: const Text('Forgot password?'),
+                              ),
+                            if (mode == AuthMode.phone)
                               TextFormField(
-                                controller: emailController,
-                                decoration:
-                                    const InputDecoration(hintText: 'Email'),
+                                controller: phoneController,
+                                decoration: const InputDecoration(
+                                  hintText: '+16505550101',
+                                  labelText: 'Phone number',
+                                ),
                                 validator: (value) =>
                                     value != null && value.isNotEmpty
                                         ? null
                                         : 'Required',
                               ),
-                              const SizedBox(height: 20),
-                              TextFormField(
-                                controller: passwordController,
-                                obscureText: true,
-                                decoration:
-                                    const InputDecoration(hintText: 'Password'),
-                                validator: (value) =>
-                                    value != null && value.isNotEmpty
-                                        ? null
-                                        : 'Required',
-                              ),
-                            ],
-                          ),
-                        const SizedBox(height: 10),
-                        if (mode != AuthMode.phone)
-                          TextButton(
-                            onPressed: _resetPassword,
-                            child: const Text('Forgot password?'),
-                          ),
-                        if (mode == AuthMode.phone)
-                          TextFormField(
-                            controller: phoneController,
-                            decoration: const InputDecoration(
-                              hintText: '+16505550101',
-                              labelText: 'Phone number',
-                            ),
-                            validator: (value) =>
-                                value != null && value.isNotEmpty
-                                    ? null
-                                    : 'Required',
-                          ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: isLoading
-                                ? null
-                                : mode == AuthMode.phone
-                                    ? _phoneAuth
-                                    : _emailAuth,
-                            child: Text(mode.label),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ...SocialOAuthProvider.values
-                            .where(
-                          (provider) =>
-                              defaultTargetPlatform == TargetPlatform.macOS ||
-                              provider != SocialOAuthProvider.apple,
-                        )
-                            .map((provider) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: SizedBox(
+                            const SizedBox(height: 20),
+                            SizedBox(
                               width: double.infinity,
                               height: 50,
-                              child: SignInButton(
-                                provider.button,
-                                onPressed: () {
-                                  if (!isLoading) {
-                                    switch (provider) {
-                                      case SocialOAuthProvider.google:
-                                        _googleSignIn();
-                                        break;
-                                      case SocialOAuthProvider.facebook:
-                                        _facebookSignIn();
-                                        break;
-                                      case SocialOAuthProvider.twitter:
-                                        _twitterSignIn();
-                                        break;
-                                      case SocialOAuthProvider.github:
-                                        _githubSignIn();
-                                        break;
-                                      case SocialOAuthProvider.apple:
-                                        _appleSignIn();
-                                        break;
-                                    }
-                                  }
-                                },
+                              child: ElevatedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : mode == AuthMode.phone
+                                        ? _phoneAuth
+                                        : _emailAuth,
+                                child: Text(mode.label),
                               ),
                             ),
-                          );
-                        }).toList(),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: OutlinedButton(
-                            onPressed: isLoading
-                                ? null
-                                : () {
-                                    if (mode != AuthMode.phone) {
-                                      setState(() {
-                                        mode = AuthMode.phone;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        mode = AuthMode.login;
-                                      });
-                                    }
-                                  },
-                            child: Text(
-                              mode != AuthMode.phone
-                                  ? 'Sign in with Phone Number'
-                                  : 'sign in with Email and Password',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        if (mode != AuthMode.phone)
-                          RichText(
-                            text: TextSpan(
-                              style: Theme.of(context).textTheme.bodyText1,
-                              children: [
-                                TextSpan(
-                                  text: mode == AuthMode.login
-                                      ? "Don't have an account? "
-                                      : 'You have an account? ',
-                                ),
-                                TextSpan(
-                                  text: mode == AuthMode.login
-                                      ? 'Register now'
-                                      : 'Click to login',
-                                  style: const TextStyle(color: Colors.blue),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      setState(() {
-                                        mode = mode == AuthMode.login
-                                            ? AuthMode.register
-                                            : AuthMode.login;
-                                      });
+                            const SizedBox(height: 20),
+                            ...SocialOAuthProvider.values
+                                .where(
+                              (provider) =>
+                                  defaultTargetPlatform ==
+                                      TargetPlatform.macOS ||
+                                  provider != SocialOAuthProvider.apple,
+                            )
+                                .map((provider) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: SignInButton(
+                                    provider.button,
+                                    onPressed: () {
+                                      if (!isLoading) {
+                                        switch (provider) {
+                                          case SocialOAuthProvider.google:
+                                            _googleSignIn();
+                                            break;
+                                          case SocialOAuthProvider.facebook:
+                                            _facebookSignIn();
+                                            break;
+                                          case SocialOAuthProvider.twitter:
+                                            _twitterSignIn();
+                                            break;
+                                          case SocialOAuthProvider.github:
+                                            _githubSignIn();
+                                            break;
+                                          case SocialOAuthProvider.apple:
+                                            _appleSignIn();
+                                            break;
+                                        }
+                                      }
                                     },
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        const SizedBox(height: 10),
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.bodyText1,
-                            children: [
-                              const TextSpan(text: 'Or '),
-                              TextSpan(
-                                text: 'continue as guest',
-                                style: const TextStyle(color: Colors.blue),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = _anonymousAuth,
+                              );
+                            }).toList(),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: OutlinedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () {
+                                        if (mode != AuthMode.phone) {
+                                          setState(() {
+                                            mode = AuthMode.phone;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            mode = AuthMode.login;
+                                          });
+                                        }
+                                      },
+                                child: Text(
+                                  mode != AuthMode.phone
+                                      ? 'Sign in with Phone Number'
+                                      : 'sign in with Email and Password',
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 20),
+                            if (mode != AuthMode.phone)
+                              RichText(
+                                text: TextSpan(
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                  children: [
+                                    TextSpan(
+                                      text: mode == AuthMode.login
+                                          ? "Don't have an account? "
+                                          : 'You have an account? ',
+                                    ),
+                                    TextSpan(
+                                      text: mode == AuthMode.login
+                                          ? 'Register now'
+                                          : 'Click to login',
+                                      style:
+                                          const TextStyle(color: Colors.blue),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          setState(() {
+                                            mode = mode == AuthMode.login
+                                                ? AuthMode.register
+                                                : AuthMode.login;
+                                          });
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            const SizedBox(height: 10),
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyText1,
+                                children: [
+                                  const TextSpan(text: 'Or '),
+                                  TextSpan(
+                                    text: 'continue as guest',
+                                    style: const TextStyle(color: Colors.blue),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = _anonymousAuth,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: isLoading
+                    ? Container(
+                        color: Colors.black.withOpacity(0.8),
+                        child: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                      )
+                    : const SizedBox(),
+              )
+            ],
           ),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: isLoading
-                ? Container(
-                    color: Colors.black.withOpacity(0.8),
-                    child: const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                  )
-                : const SizedBox(),
-          )
-        ],
-      ),
     );
   }
 }

@@ -3,10 +3,10 @@
 
 APPNAME = runner
 type = app
-profile = common-4.0
+profile = common-5.5 
 
 # Source files
-USER_SRCS += src/runner.cc
+USER_SRCS += src/*.cc
 
 # User defines
 USER_DEFS =
@@ -17,7 +17,7 @@ USER_CPP_UNDEFS =
 # Compiler/linker flags
 USER_CFLAGS_MISC =
 USER_CPPFLAGS_MISC = -c -fmessage-length=0
-USER_LFLAGS = -Wl,-E
+USER_LFLAGS = -lchromium-ewk -Wl,-rpath='$$ORIGIN' -Llib/${BUILD_ARCH}
 
 # Libraries and objects
 USER_LIB_DIRS = lib

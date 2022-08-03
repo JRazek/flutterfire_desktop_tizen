@@ -3,7 +3,7 @@
 
 APPNAME = firebase_auth_desktop_plugin
 type = staticLib
-profile = common-4.0
+profile = common-5.5
 
 # Source files
 USER_SRCS += src/*.cc
@@ -17,6 +17,7 @@ USER_CPP_UNDEFS =
 # Compiler flags
 USER_CFLAGS_MISC =
 USER_CPPFLAGS_MISC =
+USER_LFLAGS = -lchromium-ewk -Wl,-rpath='$$ORIGIN' -Llib/${BUILD_ARCH}
 
 # User includes
 USER_INC_DIRS = inc src
