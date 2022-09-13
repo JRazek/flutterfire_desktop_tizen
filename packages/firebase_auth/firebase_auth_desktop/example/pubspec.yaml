@@ -23,7 +23,7 @@ dependencies:
   webview_auth_tizen:
     git:
       url: https://github.com/JRazek/webview_auth_tizen.git
-      ref: 511490a
+      ref: a31bf62
 
 
 dependency_overrides:

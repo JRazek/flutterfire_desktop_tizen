@@ -28,3 +28,4 @@ class UserCredential extends UserCredentialPlatform {
           user: User(auth, ipUserCredential.user!),
         );
 }
+

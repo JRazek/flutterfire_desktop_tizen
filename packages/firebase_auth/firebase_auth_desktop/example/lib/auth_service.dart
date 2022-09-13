@@ -12,6 +12,9 @@ import 'package:desktop_webview_auth/twitter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:webview_auth_tizen/providers/google.dart';
+import 'package:webview_auth_tizen/providers/facebook.dart';
+import 'package:webview_auth_tizen/providers/github.dart';
 
 import 'auth.dart';
 
@@ -19,12 +22,11 @@ const _redirectUri =
     'https://react-native-firebase-testing.firebaseapp.com/__/auth/handler';
 const _googleClientId =
     '448618578101-sg12d2qin42cpr00f8b0gehs5s7inm0v.apps.googleusercontent.com';
-const _twitterApiKey = 'YEXSiWv5UeCHyy0c61O2LBC3B';
-const _twitterApiSecretKey =
-    'DOd9dCCRFgtnqMDQT7A68YuGZtvcO4WP1mEFS4mEJAUooM4yaE';
-const _facebookClientId = '128693022464535';
-const _githubClientId = '582d07c80a9afae77406';
-const _githubClientSecret = '2d60f5e850bc178dfa6b7f6c6e37a65b175172d3';
+const _twitterApiKey = '';
+const _twitterApiSecretKey = '';
+const _facebookClientId = '';
+const _githubClientId = '';
+const _githubClientSecret = '';
 
 /// Provide authentication services with [FirebaseAuth].
 class AuthService {
@@ -82,30 +84,24 @@ class AuthService {
     }
   }
 
-  Future<void> googleSignIn() async {
+  Future<void> googleSignIn(BuildContext context) async {
     try {
       // Handle login by a third-party provider.
-      final result = await DesktopWebviewAuth.signIn(
-        GoogleSignInArgs(
-          clientId:
-              '448618578101-sg12d2qin42cpr00f8b0gehs5s7inm0v.apps.googleusercontent.com',
-          redirectUri: _redirectUri,
-          scope: 'https://www.googleapis.com/auth/userinfo.email',
-        ),
+      final result = await GoogleLoginPage.signIn(
+        _googleClientId,
+        'https://www.googleapis.com/auth/userinfo.email',
+        _redirectUri,
+        context,
       );
 
-      if (result != null) {
-        // Create a new credential
-        final credential = GoogleAuthProvider.credential(
-          idToken: result.idToken,
-          accessToken: result.accessToken,
-        );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        idToken: result.idToken,
+        accessToken: result.accessToken,
+      );
 
-        // Once signed in, return the UserCredential
-        await _auth.signInWithCredential(credential);
-      } else {
-        return;
-      }
+      // Once signed in, return the UserCredential
+      await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (_) {
       rethrow;
     }
@@ -139,50 +135,40 @@ class AuthService {
     }
   }
 
-  Future<void> facebookSignIn() async {
+  Future<void> facebookSignIn(BuildContext context) async {
     try {
       // Handle login by a third-party provider.
-      final result = await DesktopWebviewAuth.signIn(
-        FacebookSignInArgs(
-          clientId: _facebookClientId,
-          redirectUri: _redirectUri,
-        ),
+      final result = await FacebookLoginPage.signIn(
+        _facebookClientId,
+        _redirectUri,
+        context,
       );
 
-      if (result != null) {
-        // Create a new credential
-        final credential = FacebookAuthProvider.credential(result.accessToken!);
+      final credential = FacebookAuthProvider.credential(result.accessToken!);
 
-        // Once signed in, return the UserCredential
-        await _auth.signInWithCredential(credential);
-      } else {
-        return;
-      }
+      // Once signed in, return the UserCredential
+      await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (_) {
       rethrow;
     }
   }
 
-  Future<void> githubSignIn() async {
+  Future<void> githubSignIn(BuildContext context) async {
     try {
       // Handle login by a third-party provider.
-      final result = await DesktopWebviewAuth.signIn(
-        GitHubSignInArgs(
-          clientId: _githubClientId,
-          clientSecret: _githubClientSecret,
-          redirectUri: _redirectUri,
-        ),
+      final result = await GithubLoginPage.signIn(
+        _githubClientId,
+        'user',
+        _redirectUri,
+        _githubClientSecret,
+        context,
       );
 
-      if (result != null) {
-        // Create a new credential
-        final credential = GithubAuthProvider.credential(result.accessToken!);
+      // Create a new credential
+      final credential = GithubAuthProvider.credential(result.accessToken!);
 
-        // Once signed in, return the UserCredential
-        await _auth.signInWithCredential(credential);
-      } else {
-        return;
-      }
+      // Once signed in, return the UserCredential
+      await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (_) {
       rethrow;
     }
