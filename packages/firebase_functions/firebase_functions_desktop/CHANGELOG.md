@@ -1,3 +1,13 @@
+## 0.2.0+3
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+2
+
+ - **REFACTOR**: refactor and add tests (#76).
+ - **FIX**: FirebaseOptions `fromMap` is no longer available (#90).
+ - **FIX**: update repository and description in pubspec.
+
 ## 0.2.0+1
 
  - Update a dependency to the latest release.

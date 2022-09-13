@@ -12,6 +12,7 @@ import 'package:firebase_auth_dart/firebase_auth_dart.dart' as auth_dart;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core_dart/firebase_core_dart.dart' as core_dart;
+import 'package:meta/meta.dart';
 
 import 'src/confirmation_result.dart';
 import 'src/firebase_auth_user.dart';
@@ -19,7 +20,7 @@ import 'src/firebase_auth_user_credential.dart';
 import 'src/recaptcha_verifier.dart';
 import 'src/utils/desktop_utils.dart';
 
-/// A Dart only implmentation of `FirebaseAuth` for managing Firebase users.
+/// A Dart only implementation of `FirebaseAuth` for managing Firebase users.
 class FirebaseAuthDesktop extends FirebaseAuthPlatform {
   /// Entry point for the [FirebaseAuthDesktop] class.
   FirebaseAuthDesktop({required FirebaseApp app})
@@ -100,7 +101,10 @@ class FirebaseAuthDesktop extends FirebaseAuthPlatform {
       _idTokenChangesListeners = <String, StreamController<UserPlatform?>>{};
 
   @override
-  FirebaseAuthPlatform delegateFor({required FirebaseApp app}) {
+  FirebaseAuthPlatform delegateFor(
+      {required FirebaseApp app, Persistence? persistence}) {
+    // The persistence parameter is not used because it's only available on web
+    // based platforms.
     return FirebaseAuthDesktop(app: app);
   }
 
@@ -349,16 +353,19 @@ class FirebaseAuthDesktop extends FirebaseAuthPlatform {
   }
 
   @override
-  Future<void> verifyPhoneNumber(
-      {required String phoneNumber,
-      required PhoneVerificationCompleted verificationCompleted,
-      required PhoneVerificationFailed verificationFailed,
-      required PhoneCodeSent codeSent,
-      required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
-      Duration timeout = const Duration(seconds: 30),
-      int? forceResendingToken,
-      String? autoRetrievedSmsCodeForTesting}) {
-    throw UnimplementedError(
-        'verifyPhoneNumber() is not implemented for Web and Desktop based platforms.');
+  Future<void> verifyPhoneNumber({
+    String? phoneNumber,
+    PhoneMultiFactorInfo? multiFactorInfo,
+    required PhoneVerificationCompleted verificationCompleted,
+    required PhoneVerificationFailed verificationFailed,
+    required PhoneCodeSent codeSent,
+    required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
+    Duration timeout = const Duration(seconds: 30),
+    int? forceResendingToken,
+    MultiFactorSession? multiFactorSession,
+    // ignore: invalid_use_of_visible_for_testing_member
+    @visibleForTesting String? autoRetrievedSmsCodeForTesting,
+  }) {
+    throw UnimplementedError('verifyPhoneNumber() is not implemented');
   }
 }

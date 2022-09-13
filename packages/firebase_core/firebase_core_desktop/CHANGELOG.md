@@ -1,3 +1,12 @@
+## 1.0.2
+
+ - **FIX**: breaking change from platform interface (#106).
+
+## 1.0.1
+
+ - **FIX**: FirebaseOptions `fromMap` is no longer available (#90).
+ - **FIX**: update repository and description in pubspec.
+
 ## 1.0.0
 
  - First stable release.
