@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, public_member_api_docs
-import 'package:desktop_webview_auth_tizen/desktop_webview_auth_tizen.dart';
+import 'package:webview_auth_tizen/webview_auth_tizen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';

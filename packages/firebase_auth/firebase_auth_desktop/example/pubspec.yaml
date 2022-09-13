@@ -10,7 +10,6 @@ environment:
 
 dependencies:
   crypto: ^3.0.1
-  desktop_webview_auth: 0.0.9
   firebase_auth: ^3.3.7
   firebase_auth_desktop: ^1.0.0
   firebase_core: ^1.12.0
@@ -18,17 +17,12 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_signin_button: ^2.0.0
-  google_sign_in: ^5.0.0-nullsafety
-  google_sign_in_dartio: ^0.2.0
   sign_in_with_apple: ^3.3.0
   yaru: ^0.2.0
-  shared_preferences_tizen:
-  url_launcher_tizen:
-  desktop_webview_auth_tizen:
-    path: ../../../../../desktop_webview_auth_tizen
-  googleapis: ^5.0.1
-  googleapis_auth: ^1.1.0
-  cupertino_icons: ^1.0.2
+  webview_auth_tizen:
+    git:
+      url: https://github.com/JRazek/webview_auth_tizen.git
+      ref: 511490a
 
 
 dependency_overrides:
